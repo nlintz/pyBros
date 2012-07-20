@@ -1,9 +1,10 @@
 import sys
 from pySQL import *
 import json
+import os
 
 class node(object):
-	def __init__(self, row, star):
+	def __init__(self, row, star = False):
 		"""
 		initializes node object
 		arg: row of SQL query data
@@ -16,11 +17,11 @@ class node(object):
 		self.pid = None
 		self.jit = None
 		self.dct = {}
-		self.is_star()
+		self.is_star(star)
 	def __repr__(self):
 		return self.name
 		return self.pid
-	def is_star(self):
+	def is_star(self,star):
 		if star:
 			self.pid = 000
 			self.adjacencies.append(self.pid)
@@ -57,8 +58,9 @@ class node(object):
 		writes json to file
 		args: file name
 		"""
-		with open('%s.json' % (fName), 'rwb') as fp:
-			json.dump(self.dct, fp)
+		fp = open(fName, 'wc')
+		json.dump(self.dct, fp)
+		fp.close()
 
 
 def create_star(jitid):
@@ -102,7 +104,11 @@ def create_universe(companies):
 
 def write_json(universe):
 	for systems in universe:
-		fName = systems[0].name
+		for nodes in systems:
+			if nodes.pid == 000:
+				ind = systems.index(nodes)
+				fName = systems[ind].name + ".json"
+				break
 		for nodes in systems:
 			nodes.write_JSON(fName)
 
@@ -112,10 +118,10 @@ def main(companies):
 	args: list of jitids where jitid is ticker symbol of company
 	prints json structure of node
 	"""
-	universe = create_universe(companies)
+	if type(companies) != list:
+		companies = [companies]
+	universe = create_universe(companies)	
+	write_json(universe)
 	
-	
-	
-
 if __name__ == "__main__":
 	main(sys.argv[1])
