@@ -22,7 +22,6 @@ class node(object):
 		arg: row of SQL query data
 		"""
 		self.id = row['id']
-		print self.id
 		self.jitid = row['jitid']
 		if star:
 			self.name = row['value']
@@ -72,6 +71,7 @@ class node(object):
 		returns boolean
 		"""
 		print get_childs_by_pid(self.id)
+		print get_childs_by_pid(2002)
 		if get_childs_by_pid(self.id):
 			return True
 		else:
