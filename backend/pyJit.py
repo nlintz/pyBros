@@ -3,8 +3,6 @@ from pySQL import *
 import json
 import os
 
-color_dict = {'Industries':'D0D9C8','Financials':'FDBD27','Healthcare':'DA5915','ConsumerDiscretionary':'4813A4','Utilities':'1581F5','IT':'333333','Materials':'5FFF00','Energy':'808099','ConsumerStaples':'003399','Telecom':'CCCCCC'}
-
 class node(object):
 	def __init__(self, row, star = False):
 		"""
@@ -146,7 +144,7 @@ def write_json(universe, color_dict):
 		systems = create_data(systems, color_dict)
 		create_JSON(systems)
 
-def main(companies):
+def main(companies, color_dict):
 	"""
 	runs all functions
 	args: list of jitids where jitid is ticker symbol of company
@@ -156,7 +154,4 @@ def main(companies):
 	if type(companies) != list:
 		companies = [companies]
 	universe = create_universe(companies)	
-	write_json(universe)
-	
-if __name__ == "__main__":
-	main(sys.argv[1])
+	write_json(universe, color_dict)
