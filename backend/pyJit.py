@@ -12,13 +12,13 @@ class node(object):
 		self.adjacencies.append(n.jitid)
 		n.pid = self.id			
 	def is_parent(self):
-		if get_child_by_pid(self.id):
+		if get_childs_by_pid(self.id):
 			return True
 		else:
 			return False
 
-def create_solar(name):
-	row = get_nodes_by_name(name)
+def create_solar(jitid):
+	row = get_node_by_jitid(jitid)
 	n = node(row)
 	if n.is_parent():
 		system = create_planets(n)
@@ -26,7 +26,7 @@ def create_solar(name):
 	
 def create_planets(parent):
 	system = []
-	child_list = get_child_by_pid(parent.id)
+	child_list = get_childs_by_pid(parent.id)
 	for childs in child_list:
 		row = get_node_by_id(childs['chid'])
 		p = node(row)
@@ -39,8 +39,8 @@ def create_planets(parent):
 			continue
 	return system
 	
-def main(name):
-	system = create_solar(name)
+def main(jitid):
+	system = create_solar(jitid)
 	print system
 
 if __name__ == "__main__":
