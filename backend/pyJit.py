@@ -3,6 +3,18 @@ from pySQL import *
 import json
 import os
 
+class root_node(object):
+	def __init__(self):
+		self.id = 000
+		self.name = 'blackhole'
+		self.adjacencies = []
+		self.data = {'name': self.name, 'ticker': 'ground zero', 'color': 333333,'dim':350 }
+	def add_adjacent(self, universe):
+		for systems in universe:
+			for nodes in systems:
+				if nodes.star:
+					self.adjacencies.append(nodes.jitid)
+
 class node(object):
 	def __init__(self, row, star = False):
 		"""
@@ -11,12 +23,16 @@ class node(object):
 		"""
 		self.id = row['id']
 		self.jitid = row['jitid']
-		self.name = row['name']
-		self.value = row['value']
+		if star:
+			self.name = row['value']
+			self.value = []
+		else:
+			self.name = row['name']
+			self.value = ['value']
 		self.adjacencies = []
 		self.pid = None
 		self.dct = {}
-		self.data
+		self.data = {}
 		self.star = star
 		self.is_star()
 		
@@ -27,7 +43,6 @@ class node(object):
 	def is_star(self):
 		if self.star:
 			self.pid = 000
-			self.adjacencies.append(self.pid)
 			
 	def star_data(self,color_dict):
 		self.data['ticker'] = self.jitid
@@ -66,13 +81,13 @@ class node(object):
 		return adj_id
 		
 	def prep_data(self,color_dict):
-		self.data['dim'] = 0.7*(float(self.data['price']))
+	#	self.data['dim'] = 0.7*(float(self.data['price']))
 		self.data['$color'] = color_dict[self.data['sector']]
 		self.data['star'] = self.star
 		
 	def prep_JSON(self):
 		self.dct = {
-		'jitid':self.jitid,
+		'id':self.jitid,
 		'name': self.name,
 		'data': self.data,
 		'adjacencies':self.generate_adjacency_id()
@@ -87,6 +102,7 @@ def create_star(jitid):
 	row = get_node_by_jitid(jitid)
 	n = node(row, star = True)
 	system = [n]
+	print n.is_parent()
 	if n.is_parent():
 		system.extend(create_system(n))
 	return system
@@ -123,7 +139,7 @@ def create_data(systems, color_dict):
 			ind = systems.index(nodes)
 		else:
 			nodes.planet_data(color_dict)
-	systems[i].star_data(color_dict)
+	systems[ind].star_data(color_dict)
 	return systems
 		
 def create_JSON(systems):
@@ -150,8 +166,5 @@ def main(companies, color_dict):
 	args: list of jitids where jitid is ticker symbol of company
 	prints json structure of node
 	"""
-	
-	if type(companies) != list:
-		companies = [companies]
-	universe = create_universe(companies)	
-	write_json(universe, color_dict)
+	universe = create_universe(companies)
+	# write_json(universe, color_dict)
