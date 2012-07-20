@@ -19,4 +19,4 @@ print 'testing data_extractor'
 
 from prune import data_extractor
 extractor = data_extractor(feeder)
-extractor.extract(html)
+extractor.extract(html[0])

@@ -14,14 +14,14 @@ from eat import database_feeder
 
 class slitherer(object):
 	def __init__(self):
-		self.feeder = url_feeder('sites.txt')
+		self.feeder = url_feeder('sp500.csv')
 		self.grabber = url_grabber()
 		self.extractor = data_extractor(self.feeder)
 		self.cleaner = data_cleanser()
 		self.eater = database_feeder('root', 'pybros', 'rev2')
 
 	def slither(self):
-		for url in self.feeder:
+		for (url,appetizer) in self.feeder:
 			html = self.grabber.retrieve(url)
 			print len(html)
 			if html == '':
@@ -29,7 +29,7 @@ class slitherer(object):
 			datalist = self.extractor.extract(html)
 			print datalist
 			dinner = self.cleaner.cook(datalist)
-			self.eater.eat(dinner)
+			self.eater.eat(dinner, appetizer)
 
 def main():
 	pybros = slitherer()
