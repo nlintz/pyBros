@@ -165,8 +165,6 @@ def main(companies, color_dict):
 	args: list of jitids where jitid is ticker symbol of company
 	prints json structure of node
 	"""
-	
-	if type(companies) != list:
-		companies = [companies]
-	universe = create_universe(companies)	
-	write_json(universe, color_dict)
+	universe = create_universe(companies)
+	print universe
+	# write_json(universe, color_dict)
