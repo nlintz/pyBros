@@ -47,7 +47,6 @@ class node(object):
 	def star_data(self,color_dict):
 		self.data['ticker'] = self.jitid
 		for n in self.adjacencies:
-			print n
 			if n.name == 'fin info':
 				self.data['price'] = n.data['price']
 				self.data['sector'] = n.data['sector']
@@ -71,6 +70,7 @@ class node(object):
 		checks if node has children
 		returns boolean
 		"""
+		print get_childs_by_pid(self.id)
 		if get_childs_by_pid(self.id):
 			return True
 		else:
@@ -101,8 +101,6 @@ def create_star(jitid):
 	return: list of all nodes in system
 	"""
 	row = get_node_by_jitid(jitid)
-	print 'row'
-	print row
 	n = node(row, star = True)
 	system = [n]
 	print n.is_parent()
@@ -170,5 +168,4 @@ def main(companies, color_dict):
 	prints json structure of node
 	"""
 	universe = create_universe(companies)
-	print universe
 	# write_json(universe, color_dict)
