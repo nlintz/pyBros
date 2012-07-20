@@ -53,15 +53,6 @@ class node(object):
 		}
 		self.jit = json.dumps(self.dct)
 		return self.jit
-	def write_JSON(self, fName):
-		"""
-		writes json to file
-		args: file name
-		"""
-		fp = open(fName, 'wc')
-		json.dump(self.dct, fp)
-		fp.close()
-
 
 def create_star(jitid):
 	"""
@@ -102,15 +93,21 @@ def create_universe(companies):
 		universe.append(system)
 	return universe
 
+def create_JSON(systems):
+	for nodes in systems:
+		if nodes.pid == 000:
+			ind = systems.index(nodes)
+			fName = systems[ind].name + ".json"
+			break
+	fp = open(fName + ".json", 'w')
+	for nodes in systems:
+		json.dump(nodes.dct,fp)
+		fp.writerow('\n')
+	fp.close()
+
 def write_json(universe):
 	for systems in universe:
-		for nodes in systems:
-			if nodes.pid == 000:
-				ind = systems.index(nodes)
-				fName = systems[ind].name + ".json"
-				break
-		for nodes in systems:
-			nodes.write_JSON(fName)
+		create_JSON(systems)
 
 def main(companies):
 	"""
