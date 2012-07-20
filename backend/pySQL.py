@@ -16,7 +16,7 @@ def get_node_by_id(node_id):
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]
 	con.close()
-	return dict(zip(desc, match))
+	return dict(zip(desc, list(match)))
 
 # TODO clean name
 def get_node_by_jitid(jitid):
@@ -49,3 +49,20 @@ def get_childs_by_pid(pid):
 		l.append(dict(zip(desc, data)))
 	con.close()
 	return l
+
+def get_parent_by_chid(chid):
+	"""Returns the row that corresponds to the parent of the node
+	with id=chid."""
+	con = _connect()
+	c = con.cursor()
+	#query = """SELECT nodes.id, nodes.name, nodes.jitid, nodes.value
+	query = """SELECT nodes.*
+	FROM nodes
+	INNER JOIN childs
+	ON nodes.id=childs.pid
+	WHERE childs.chid='%s';""" % chid
+	c.execute(query)
+	match = c.fetchone()
+	desc = [ desc[0] for desc in c.description ]
+	con.close()
+	return dict(zip(desc, match))
