@@ -23,8 +23,12 @@ class node(object):
 		"""
 		self.id = row['id']
 		self.jitid = row['jitid']
-		self.name = row['name']
-		self.value = row['value']
+		if star:
+			self.name = row['value']
+			self.value = []
+		else:
+			self.name = row['name']
+			self.value = ['value']
 		self.adjacencies = []
 		self.pid = None
 		self.dct = {}
