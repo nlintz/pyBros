@@ -40,10 +40,10 @@ class node(object):
 		returns JSON structure
 		"""
 		self.d = {
-		'jitid' : self.jitid
-		'name'  : self.name
-		'data'  : {'value':self.value}
-		'adjacencies' : self.adjacencies
+		'jitid':self.jitid,
+		'name': self.name,
+		'data':{'value':self.value},
+		'adjacencies':self.adjacencies
 		}
 		self.jit = JSON.dumps(d)
 		return self.jit
