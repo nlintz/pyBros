@@ -22,6 +22,7 @@ class node(object):
 		arg: row of SQL query data
 		"""
 		self.id = row['id']
+		print self.id
 		self.jitid = row['jitid']
 		if star:
 			self.name = row['value']
