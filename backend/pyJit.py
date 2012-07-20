@@ -3,7 +3,7 @@ from pySQL import *
 import json
 
 class node(object):
-	def __init__(self, row):
+	def __init__(self, row, star):
 		"""
 		initializes node object
 		arg: row of SQL query data
@@ -16,9 +16,14 @@ class node(object):
 		self.pid = None
 		self.jit = None
 		self.dct = {}
+		self.is_star()
 	def __repr__(self):
 		return self.name
 		return self.pid
+	def is_star(self):
+		if star:
+			self.pid = 000
+			self.adjacencies.append(self.pid)
 	def add_child(self,n):
 		"""
 		adds child to adjacencies list
@@ -52,7 +57,7 @@ class node(object):
 		writes json to file
 		args: file name
 		"""
-		with open('%s.json' % (fName), 'wb') as fp:
+		with open('%s.json' % (fName), 'rwb') as fp:
 			json.dump(self.dct, fp)
 
 
@@ -63,7 +68,7 @@ def create_star(jitid):
 	return: list of all nodes in system
 	"""
 	row = get_node_by_jitid(jitid)
-	n = node(row)
+	n = node(row, star = True)
 	system = [n]
 	if n.is_parent():
 		system.extend(create_system(n))
@@ -87,17 +92,30 @@ def create_system(parent):
 		else:
 			continue
 	return system
-	
-def main(jitid):
+
+def create_universe(companies):
+	universe =[]
+	for jitid in companies:
+		system = create_star(jitid)
+		universe.append(system)
+	return universe
+
+def write_json(universe):
+	for systems in universe:
+		fName = systems[0].name
+		for nodes in systems:
+			nodes.write_JSON(fName)
+
+def main(companies):
 	"""
 	runs all functions
-	args: jitid of company
+	args: list of jitids where jitid is ticker symbol of company
 	prints json structure of node
 	"""
-	system = create_star(jitid)
-	for i in range(len(system)):
-		system[i] = system[i].generate_JSON()
-	print system	
+	universe = create_universe(companies)
+	
+	
+	
 
 if __name__ == "__main__":
 	main(sys.argv[1])
