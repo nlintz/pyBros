@@ -91,7 +91,7 @@ def create_planets(parent):
 def main(jitid):
 	system = create_solar(jitid)
 	for i in range(len(system)):
-		system[i] = system[i].generate_JSONk
+		system[i] = system[i].generate_JSON
 
 if __name__ == "__main__":
 	main(sys.argv[1])
