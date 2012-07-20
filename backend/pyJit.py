@@ -55,6 +55,7 @@ class node(object):
 		with open('%s.json' % (fName), 'wb') as fp:
 			json.dump(self.d, fp)
 
+
 def create_star(jitid):
 	"""
 	creates star/company
@@ -68,7 +69,7 @@ def create_star(jitid):
 		system.extend(create_planets(n))
 	return system
 	
-def create_planets(parent):
+def create_system(parent):
 	"""
 	creates childs of parent node recursively
 	args: parent node
@@ -93,7 +94,7 @@ def main(jitid):
 	args: jitid of company
 	prints json structure of node
 	"""
-	system = create_solar(jitid)
+	system = create_system(jitid)
 	for i in range(len(system)):
 		system[i] = system[i].generate_JSON
 
