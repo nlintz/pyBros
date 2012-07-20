@@ -113,6 +113,7 @@ function init(){
 	
 	
 //	init RGraph
+	
     var rgraph = new $jit.RGraph({
         //Where to append the visualization
         injectInto: 'infovis',
