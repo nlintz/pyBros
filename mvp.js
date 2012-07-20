@@ -1,5 +1,6 @@
 var labelType, useGradients, nativeTextSupport, animate;
 
+
 (function() {
   var ua = navigator.userAgent,
       iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
@@ -7,8 +8,9 @@ var labelType, useGradients, nativeTextSupport, animate;
       nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
       textSupport = nativeCanvasSupport 
         && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
-  //I'm setting this based on the fact that ExCanvas provides text support for IE
-  //and that as of today iPhone/iPad current text support is lame
+  // I'm setting this based on the fact that ExCanvas provides text support
+	// for IE
+  // and that as of today iPhone/iPad current text support is lame
   labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
   nativeTextSupport = labelType == 'Native';
   useGradients = nativeCanvasSupport;
@@ -27,12 +29,15 @@ var Log = {
 
 
 function init(){
-    
+	
+
+
 	var json = {
 		id : "1",
 		name : "blackHole",
 		data : {
-			$dim : 50,
+			$color: '#C17878',
+			$dim : 500,
 			pokemonPower : "turnYoSwagOn",
 			tip: "protect ya neck"
 		},
@@ -95,83 +100,91 @@ function init(){
 	}
 
 
-	//	init RGraph
+	// init RGraph
 	var rgraph = new $jit.RGraph({
-		//Where to append the visualization
+		// Where to append the visualization
 		injectInto : 'infovis',
-		levelDistance : 500,
-		//Add navigation capabilities:
-		//zooming by scrolling and panning.
+		levelDistance : 750,
+		// Add navigation capabilities:
+		// zooming by scrolling and panning.
 
-		Label : {  
-				  overridable: false,  
-				  type: 'HTML', //'SVG', 'Native'  
-				  style: ' ',  
-				  size: 10,  
-				  family: 'sans-serif',  
-				  textAlign: 'center',  
-				  textBaseline: 'alphabetic',  
-				  color: '#fff'  
-				},  
 
-		Label: {  
-		    type: 'Native',  
-		    size: 11,
-		    family: 'sans-serif', 
-		    color: '#000'  
-		  },
-		Navigation : {
-			enable : true,
-			panning : true,
-			zooming : 40
-		},
-		//Set Node and Edge styles.
-		Node : {
-			color : '#ddeeff',
+        // Add navigation capabilities:
+        // zooming by scrolling and panning.
+
+
+		Label: {
+			overridable: true,
+		    type: 'HTML', // Native or HTML
+		    size: 20,  
+		    style: 'bold'  
+		  },  
+		Navigation: {
+          enable: true,
+          panning: true,
+          zooming: 10
+        },
+        // Set Node and Edge styles.
+        Node : {
+			color : '#0099FF',
 			alpha : 1,
 			'overridable' : true,
-			allowVariableNodeDiameters : true
+			allowVariableNodeDiameters : true,
+			CanvasStyles: {
+				strokeStyle: "0000CC"
+			}
 		},
-//
+		
+		NodeStyles:{
+			enable: true,
+			type: 'auto',
+			stylesHover: {  
+			      color: '#fcc'  
+			    },  
+			duration: 600
+		},
+		
+		
+
+        
 		Edge : {
-			color : '#C17878',
+			color : '#33FF33',
 			alpha: .5,
 			lineWidth : 1.5
 		},
-		
 		Tips : {  
-				  enable: true,  
-				  type: 'auto',  
-				  offsetX: 20,  
-				  offsetY: 20,
-				  onShow: function(tip, elem) {
-				         tip.innerHTML = "<b>" + elem.name + "</b>: " + elem.data.tip;
-				      }
+			  enable: true,  
+			  type: 'auto',  
+			  offsetX: 20,  
+			  offsetY: 20,
+			  onShow: function(tip, elem) {
+			         tip.innerHTML = "<b>" + elem.name + "</b>: " + elem.data.tip;
+			      }
 
-				},
+			},
 
-		onBeforeCompute: function(node){
-            Log.write("centering " + node.name + "...");
-            //Add the relation list in the right column.
-            //This list is taken from the data property of each JSON node.
+        
+
+        onBeforeCompute: function(node){
+            // Add the relation list in the right column.
+            // This list is taken from the data property of each JSON node.
             $jit.id('inner-details').innerHTML = node.data.relation;
         },
         
-        //Add the name of the node in the correponding label
-        //and a click handler to move the graph.
-        //This method is called once, on label creation.
+        // Add the name of the node in the correponding label
+        // and a click handler to move the graph.
+        // This method is called once, on label creation.
         onCreateLabel: function(domElement, node){
             domElement.innerHTML = node.name;
             domElement.onclick = function(){
                 rgraph.onClick(node.id, {
                     onComplete: function() {
-                        Log.write("done");
                     }
                 });
             };
         },
-        //Change some label dom properties.
-        //This method is called each time a label is plotted.
+        // Change some label dom properties.
+        // This method is called each time a label is plotted.
         onPlaceLabel: function(domElement, node){
             var style = domElement.style;
             style.display = '';
@@ -194,9 +207,9 @@ function init(){
             style.left = (left - w / 2) + 'px';
         }
     });
-    //load JSON data
+    // load JSON data
     rgraph.loadJSON(json);
-    //trigger small animation
+    // trigger small animation
     rgraph.graph.eachNode(function(n) {
       var pos = n.getPos();
       pos.setc(-200, -200);
@@ -206,7 +219,8 @@ function init(){
       modes:['polar'],
       duration: 2000
     });
-    //end
-    //append information about the root relations in the right column
+    // end
+    // append information about the root relations in the right column
     $jit.id('inner-details').innerHTML = rgraph.graph.getNode(rgraph.root).data.relation;
 }
+

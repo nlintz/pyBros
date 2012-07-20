@@ -18,8 +18,9 @@ class url_feeder(object):
 		"""fname is the name of the file that we will have a url in
 		each line representing a page for us to scrape."""
 		self.queue = []
-		with csv.DictReader(fname) as f:
-			for l in f:
+		with open(fname) as f:
+			reader = csv.DictReader(f)
+			for l in reader:
 				self.insert((l['url'], l))
 
 	def __iter__(self):

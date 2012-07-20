@@ -9,6 +9,9 @@ def create_yfinance_url(f_name):
 		url_list.append(url)
 	return url_list
 
+def create_csv_with_urls(f_name):
+	csv.DictReader(f_name)
+
 def main(f_name = 'sp500.csv'):
 	a = create_yfinance_url(f_name)
 	print a

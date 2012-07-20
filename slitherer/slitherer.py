@@ -21,13 +21,14 @@ class slitherer(object):
 		self.eater = database_feeder('root', 'pybros', 'rev2')
 
 	def slither(self):
+		i = 0
 		for (url,appetizer) in self.feeder:
+			i += 1
+			print i
 			html = self.grabber.retrieve(url)
-			print len(html)
 			if html == '':
 				continue # maybe something else?
 			datalist = self.extractor.extract(html)
-			print datalist
 			dinner = self.cleaner.cook(datalist)
 			self.eater.eat(dinner, appetizer)
 
