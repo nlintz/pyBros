@@ -1,7 +1,7 @@
 import MySQLdb
 
 def _connect():
-	return MySQLdb.connect(user='root', passwd='pybros', db='rev2')
+	return MySQLdb.connect(user='root', passwd='pybros', db='rev3')
 
 # TODO clean node_id
 def get_node_by_id(node_id):
@@ -11,7 +11,7 @@ def get_node_by_id(node_id):
 	c = con.cursor()
 	query = """SELECT * 
 	FROM nodes
-	WHERE id='%s';""" % node_id
+	WHERE nid='%s';""" % node_id
 	c.execute(query)
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]
@@ -39,11 +39,11 @@ def get_node_by_jitid(jitid):
 
 def get_childs_by_pid(pid):
 	"""Returns all the rows that correspond to the children with 
-	parents that have id=pid."""
+	parents that have nid=pid."""
 	con = _connect()
 	c = con.cursor()
 	query = """SELECT *
-	FROM childs
+	FROM relations 
 	WHERE pid='%s';""" % pid
 	num = c.execute(query) # num should be the number of matches
 	desc = [ desc[0] for desc in c.description ]
@@ -63,8 +63,8 @@ def get_parent_by_chid(chid):
 	query = """SELECT nodes.*
 	FROM nodes
 	INNER JOIN childs
-	ON nodes.id=childs.pid
-	WHERE childs.chid='%s';""" % chid
+	ON nodes.nid=relations.pid
+	WHERE relations.chid='%s';""" % chid
 	c.execute(query)
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]

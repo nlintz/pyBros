@@ -23,12 +23,8 @@ class node(object):
 		"""
 		self.id = row['id']
 		self.jitid = row['jitid']
-		if star:
-			self.name = row['value']
-			self.value = []
-		else:
-			self.name = row['name']
-			self.value = ['value']
+		self.name = row['name']
+		self.value = ['value']
 		self.adjacencies = []
 		self.pid = None
 		self.dct = {}
@@ -101,8 +97,8 @@ def create_star(jitid):
 	"""
 	row = get_node_by_jitid(jitid)
 	n = node(row, star = True)
+	print n.name
 	system = [n]
-	print n.is_parent()
 	if n.is_parent():
 		system.extend(create_system(n))
 	return system
@@ -167,4 +163,5 @@ def main(companies, color_dict):
 	prints json structure of node
 	"""
 	universe = create_universe(companies)
+	print universe
 	# write_json(universe, color_dict)

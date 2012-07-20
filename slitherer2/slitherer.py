@@ -18,17 +18,19 @@ class slitherer(object):
 		self.grabber = url_grabber()
 		self.extractor = data_extractor(self.feeder)
 		self.cleaner = data_cleanser()
-		self.eater = database_feeder('root', 'pybros', 'rev3')
+		self.eater = database_feeder('root', 'pybros', 'rev2')
 
 	def slither(self):
 		i = 0
-		for (url,appetizer) in self.feeder:
+		for url in self.feeder:
 			i += 1
 			print i
-			html = self.grabber.retrieve(url)
-			if html == '':
+			if i > 1:
+				break
+			xml = self.grabber.retrieve(url)
+			if xml == '':
 				continue # maybe something else?
-			datalist = self.extractor.extract(html)
+			datalist = self.extractor.extract(xml)
 			dinner = self.cleaner.cook(datalist)
 			self.eater.eat(dinner, appetizer)
 
