@@ -29,15 +29,13 @@ function init() {
 	var json =
 			[
 			{
-			"adjacencies": ["239"], "data": {"value": null}, "name": "intuit", "id": "Az9"
+			"adjacencies": ["239"], "data": {"is_star":true,"value": null, "name":"intuit","jitid":"herroi","value":"9000"}, "name": "intuit", "id": "Az9"
 			},
 			{
-			"adjacencies": ["Az9"], "data": {"value": null}, "name": "fin info", "id": "239"
-			},
-			
-			{"adjacencies": ["Az9"], "data": {"value": "INTU"}, "name": "ticker", "id": "8ob"},
-			{"adjacencies": ["Az9"], "data": {"value": "59"}, "name": "price", "id": "7br"}
+				"adjacencies": ["Az9"], "data": {"is_star":false,"value": null, "name":"mars","jitid":"","value":"", "fin info":"100"}, "name": "intuit", "id": "239"
+			}
 			]
+	
 			
 	
 	// init RGraph
@@ -95,7 +93,14 @@ function init() {
 			offsetX : 20,
 			offsetY : 20,
 			onShow : function(tip, elem) {
-				tip.innerHTML = "<b>" + elem.name + "</b>: " + elem.data.tip;
+				if (elem.data.is_star){
+					tip.innerHTML = "Name: \n"+elem.name+" Ticker: \n" +elem.data.jitid +"Value: \n"+elem.data.value
+				}
+				else{
+					tip.innerHTML = "Financial Information"+elem.data["fin info"];
+				}
+				
+				
 			}
 
 		},
