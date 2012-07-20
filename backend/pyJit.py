@@ -70,8 +70,6 @@ class node(object):
 		checks if node has children
 		returns boolean
 		"""
-		print get_childs_by_pid(self.id)
-		print get_childs_by_pid(2002)
 		if get_childs_by_pid(self.id):
 			return True
 		else:
@@ -89,7 +87,7 @@ class node(object):
 		
 	def prep_JSON(self):
 		self.dct = {
-		'jitid':self.jitid,
+		'id':self.jitid,
 		'name': self.name,
 		'data': self.data,
 		'adjacencies':self.generate_adjacency_id()
