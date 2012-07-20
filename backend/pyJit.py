@@ -52,7 +52,6 @@ class node(object):
 		'adjacencies':self.adjacencies
 		}
 		self.jit = json.dumps(self.dct)
-		return self.jit
 
 def create_star(jitid):
 	"""
@@ -101,6 +100,7 @@ def create_JSON(systems):
 			break
 	fp = open(fName, 'w')
 	for nodes in systems:
+		nodes.generate_JSON()
 		json.dump(nodes.dct,fp)
 		fp.write('\n')
 	fp.close()
