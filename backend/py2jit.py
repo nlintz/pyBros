@@ -11,15 +11,19 @@ class node(object):
 		self.value = row['value']
 		self.data = {}
 
-class star(node, ticker):
-	def __init__(self):
-		super(node, self, row).__init__()
+class star(node):
+	def __init__(self,row):
+		super(node, self).__init__()
 		self.adj = []
+		self.id
+		self.name
+		self.value = row['value']
+		self.data = {}
 	def is_star(self):
 		return True
 	def get_data(self, color_dict):
 		for planets in self.adj:
-			if planets.name == 'fin info'
+			if planets.name == 'fin info':
 				self.data['price'] = planets.data['price']
 				self.data['ticker'] = planets.data['ticker']
 				break
@@ -35,22 +39,24 @@ class star(node, ticker):
 		return adj_id
 		
 
-class planet(node, jittid):
-	def __init__(self):
-		super(node, self, row).__init__()
+class planet(node):
+	def __init__(self,rows,jitid):
+		super(node, self).__init__()
+		self.adj = [jitid]
 	def get_data(self, color_dict):
 		attr_list = get_childs_by_pid(self.id)
 		for attr in attr_list:
 			dat = get_node_by_id(attr['chid'])
-			self.data[dat['name']]:dat['value']
+			self.data[dat['name']] = dat['value']
 
 def main(companies, color_dict):
 	universe = []
 	for tickers in companies:
-		row = get_node_by_jitid(ticker)
+		row = get_node_by_jitid(tickers)
 		st = star(row)
 		st.get_children()
 		for pl in st.adj:
 			pl.get_data(color_dict)
+		st.get_data(color_dict)
 		universe.append(st)
 	print universe

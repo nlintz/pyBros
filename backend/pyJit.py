@@ -63,8 +63,10 @@ class node(object):
 def create_star(ticker):
 	row = get_node_by_jitid(ticker)
 	n = node(row, 'star')
+	print n
 	system = [n]
-	if n.is_parent():
+	print n.is_parent()
+	if n.is_parent:
 		system.extend(create_system(n))
 	return system
 	
@@ -75,6 +77,7 @@ def create_system(parent):
 	returns list of all children node for given parent node
 	"""
 	system = []
+	print parent.name
 	child_list = get_childs_by_pid(parent.id)
 	if parent.name != 'fin info':		
 		for childs in child_list:
