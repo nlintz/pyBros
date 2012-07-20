@@ -3,6 +3,8 @@ from pySQL import *
 import json
 import os
 
+color_dict = {'Industries':'D0D9C8','Financials':'FDBD27','Healthcare':'DA5915','ConsumerDiscretionary':'4813A4','Utilities':'1581F5','IT':'333333','Materials':'5FFF00','Energy':'808099','ConsumerStaples':'003399','Telecom':'CCCCCC'}
+
 class node(object):
 	def __init__(self, row, star = False):
 		"""
@@ -12,25 +14,44 @@ class node(object):
 		self.id = row['id']
 		self.jitid = row['jitid']
 		self.name = row['name']
-		self.adjacencies = []
 		self.value = row['value']
+		self.adjacencies = []
 		self.pid = None
-		self.jit = None
 		self.dct = {}
-		self.is_star(star)
+		self.data
+		self.star = star
+		self.is_star()
+		
 	def __repr__(self):
 		return self.name
 		return self.pid
-	def is_star(self,star):
-		if star:
+		
+	def is_star(self):
+		if self.star:
 			self.pid = 000
 			self.adjacencies.append(self.pid)
+			
+	def star_data(self,color_dict):
+		self.data['ticker'] = self.jitid
+		for n in self.adjacencies:
+			if n.name == 'fin info':
+				self.data['price'] = n.data['price']
+				self.data['sector'] = n.data['sector']
+				break
+		self.prep_data(color_dict)
+		
+	def planet_data(self,color_dict):
+		for n in self.adjacencies:
+			self.data[n.name] = n.value
+		self.prep_data(color_dict)
+		self.adjacencies = []
+	
 	def add_child(self,n):
 		"""
 		adds child to adjacencies list
 		"""
-		self.adjacencies.append(n.jitid)
-		n.pid = self.id			
+		self.adjacencies.append(n)
+		n.pid = self.id		
 	def is_parent(self):
 		"""
 		checks if node has children
@@ -40,18 +61,24 @@ class node(object):
 			return True
 		else:
 			return False
-	def generate_JSON(self):
-		"""
-		generates JSON structure
-		returns JSON structure
-		"""
+	def generate_adjacency_id(self):
+		adj_id= []
+		for childs in self.adjacencies:
+			adj_id.append(childs.jitid)
+		return adj_id
+		
+	def prep_data(self,color_dict):
+		self.data['dim'] = 0.7*(float(self.data['price']))
+		self.data['$color'] = color_dict[self.data['sector']]
+		self.data['star'] = self.star
+		
+	def prep_JSON(self):
 		self.dct = {
 		'jitid':self.jitid,
 		'name': self.name,
-		'data':{'value':self.value},
-		'adjacencies':self.adjacencies
+		'data': self.data,
+		'adjacencies':self.generate_adjacency_id()
 		}
-		self.jit = json.dumps(self.dct)
 
 def create_star(jitid):
 	"""
@@ -92,6 +119,15 @@ def create_universe(companies):
 		universe.append(system)
 	return universe
 
+def create_data(systems, color_dict):
+	for nodes in systems:
+		if nodes.star:
+			ind = systems.index(nodes)
+		else nodes.star:
+			nodes.planet_data(color_dict)
+	systems[i].star_data(color_dict)
+	return systems
+		
 def create_JSON(systems):
 	for nodes in systems:
 		if nodes.pid == 000:
@@ -105,8 +141,9 @@ def create_JSON(systems):
 		fp.write('\n')
 	fp.close()
 
-def write_json(universe):
+def write_json(universe, color_dict):
 	for systems in universe:
+		systems = create_data(systems, color_dict)
 		create_JSON(systems)
 
 def main(companies):
@@ -115,6 +152,7 @@ def main(companies):
 	args: list of jitids where jitid is ticker symbol of company
 	prints json structure of node
 	"""
+	
 	if type(companies) != list:
 		companies = [companies]
 	universe = create_universe(companies)	
