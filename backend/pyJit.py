@@ -123,7 +123,7 @@ def create_data(systems, color_dict):
 	for nodes in systems:
 		if nodes.star:
 			ind = systems.index(nodes)
-		else nodes.star:
+		else:
 			nodes.planet_data(color_dict)
 	systems[i].star_data(color_dict)
 	return systems
