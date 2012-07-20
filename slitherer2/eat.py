@@ -11,7 +11,7 @@
 from hashlib import md5
 
 def _gen_jitid(name, compname, ticker):
-	if name == compname:
+	if name == 'company':
 		return ticker
 	else:
 		m = md5()
@@ -33,40 +33,27 @@ class database_feeder(object):
 		d = self.dbname
 		return MySQLdb.connect(user=u, passwd=p, db=d)
 
+	# TODO clean item names and values
 	def spoon(self, item):
 		"""items are nodes, from prune"""
 		con = self._connect()
 		c = con.cursor()
-		def esc(s):
-			if s != None:
-				return con.escape_string(str(s))
-			else:
-				return None
 		query = """INSERT INTO nodes (name, jitid, value)
-		VALUE ('%s', '%s', '%s');""" % \
-		(esc(item.name), esc(item.jitid), esc(item.value))
+VALUE ('%s', '%s', '%s');""" % (item.name, item.jitid, item.value)
 		print query
-		try:
-			c.execute(query)
-		except:
-			con.close()
-			return
+		# this is where the exception occured
+		c.execute(query)
 		con.commit()
-		query = """SELECT nid
+		query = """SELECT id
 		FROM nodes
-		WHERE jitid='%s';""" % esc(item.jitid)
+		WHERE jitid='%s';""" % item.jitid
 		print query
-		try:
-			c.execute(query)
-		except:
-			con.close()
-			return
+		c.execute(query)
 		row = c.fetchone()
 		item.myid = row[0]
-		print item.myid
 		if item.pid != None:
-			query = """INSERT INTO relations (pid, chid)
-			VALUE ('%s', '%s');""" % (esc(item.pid), esc(item.myid))
+			query = """INSERT INTO childs (pid, chid)
+VALUE ('%s', '%s');""" % (item.pid, item.myid)
 			c.execute(query)
 			con.commit()
 			print query
@@ -80,19 +67,13 @@ class database_feeder(object):
 				ticker = v
 			elif k == 'company':
 				compname = v
-				continue
 			entree.adjacencies.append(node(k, v))
 		# generate jitids
-		course = node(compname, None)
-		course.adjacencies.append(entree)
-		course.jitid = _gen_jitid(compname, compname, ticker)
 		entree.jitid = _gen_jitid(entree.name, compname, ticker)
 		for submeal in entree.adjacencies:
 			submeal.jitid = _gen_jitid(submeal.name, compname, ticker)
 		# insert into mysql
-		course.pid = None
-		self.spoon(course)
-		entree.pid = course.myid
+		entree.pid = None
 		self.spoon(entree)
 		for submeal in entree.adjacencies:
 			submeal.pid = entree.myid
