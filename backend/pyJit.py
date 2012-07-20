@@ -97,8 +97,11 @@ def create_star(jitid):
 	return: list of all nodes in system
 	"""
 	row = get_node_by_jitid(jitid)
+	print 'row'
+	print row
 	n = node(row, star = True)
 	system = [n]
+	print n.is_parent()
 	if n.is_parent():
 		system.extend(create_system(n))
 	return system
@@ -125,9 +128,7 @@ def create_system(parent):
 def create_universe(companies):
 	universe =[]
 	for jitid in companies:
-		print jitid
 		system = create_star(jitid)
-		print type(system[0])
 		universe.append(system)
 	return universe
 
@@ -155,7 +156,6 @@ def create_JSON(systems):
 
 def write_json(universe, color_dict):
 	for systems in universe:
-		print systems
 		systems = create_data(systems, color_dict)
 		create_JSON(systems)
 
