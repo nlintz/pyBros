@@ -88,6 +88,11 @@ def create_planets(parent):
 	return system
 	
 def main(jitid):
+	"""
+	runs all functions
+	args: jitid of company
+	prints json structure of node
+	"""
 	system = create_solar(jitid)
 	for i in range(len(system)):
 		system[i] = system[i].generate_JSON
