@@ -1,20 +1,6 @@
 var labelType, useGradients, nativeTextSupport, animate;
 
-(function() {
-  var ua = navigator.userAgent,
-      iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
-      typeOfCanvas = typeof HTMLCanvasElement,
-      nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
-      textSupport = nativeCanvasSupport 
-        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
-  //I'm setting this based on the fact that ExCanvas provides text support for IE
-  //and that as of today iPhone/iPad current text support is lame
-  labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
-  nativeTextSupport = labelType == 'Native';
-  useGradients = nativeCanvasSupport;
-  animate = !(iStuff || !nativeCanvasSupport);
-})();
-
+//This variable is used to write the names of nodes
 var Log = {
   elem: false,
   write: function(text){
@@ -27,7 +13,7 @@ var Log = {
 
 
 function init(){
-    //init data
+    //init data - This variable stores all of your json that will be converted into rgraph
     var json = {
         id: "190_0",
         name: "Pearl Jam",
@@ -391,14 +377,14 @@ function init(){
     //init RGraph
     var rgraph = new $jit.RGraph({
         //Where to append the visualization
-        injectInto: 'infovis',
+        injectInto: 'infovis', // This is a div in your html
         //Optional: create a background canvas that plots
         //concentric circles.
-        background: {
-          CanvasStyles: {
-            strokeStyle: '#555'
-          }
-        },
+        // background: {
+//           CanvasStyles: {
+//             strokeStyle: '#555'
+//           }
+//         },
         //Add navigation capabilities:
         //zooming by scrolling and panning.
         Navigation: {
@@ -456,8 +442,6 @@ function init(){
             }
 
             var left = parseInt(style.left);
-            var w = domElement.offsetWidth;
-            style.left = (left - w / 2) + 'px';
         }
     });
     //load JSON data

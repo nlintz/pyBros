@@ -5,23 +5,27 @@
 <title>RGraph - Tree Animation</title>
 
 <!-- CSS Files -->
-<link type="text/css" href="../css/base.css" rel="stylesheet" />
-<link type="text/css" href="../css/RGraph.css" rel="stylesheet" />
+<link type="text/css" href="jit/examples/css/base.css" rel="stylesheet" />
+<link type="text/css" href="jit/examples/css/RGraph.css"
+	rel="stylesheet" />
 
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
 
 <!-- JIT Library File -->
-<script language="javascript" type="text/javascript" src="../../jit.js"></script>
+<script language="javascript" type="text/javascript" src="jit/jit.js"></script>
 
 <!-- Example File -->
-<script language="javascript" type="text/javascript" src="../../../mvp.js"></script>
+<script language="javascript" type="text/javascript" src="mvp.js"></script>
 </head>
 
 <body onload="init();">
-<div id="container">
-<div id="center-container">
-    <div id="infovis"></div>    
-</div>
-</div>
+	<div id="midground"></div>
+	<div id="foreground">
+		<div id="container">
+			<div id="center-container">
+				<div id="infovis"></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
