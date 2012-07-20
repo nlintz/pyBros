@@ -99,10 +99,10 @@ def create_JSON(systems):
 			ind = systems.index(nodes)
 			fName = systems[ind].name + ".json"
 			break
-	fp = open(fName + ".json", 'w')
+	fp = open(fName, 'w')
 	for nodes in systems:
 		json.dump(nodes.dct,fp)
-		fp.writerow('\n')
+		fp.write('\n')
 	fp.close()
 
 def write_json(universe):
