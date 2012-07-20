@@ -93,95 +93,7 @@ function init(){
 			} ]
 		} ]
 	}
-<<<<<<< HEAD
-	
-//	var json=[{
-//			id:"1",
-//			name:"blackHole",
-//			data:{
-//				pokemonPower:"turnYoSwagOn"
-//			},
-//			adjacencies:["4"]
-//	},
-//	{
-//		id:"4",
-//		name:"microsoft",
-//		data:{
-//			value: "400",
-//			inc: "4",
-//		},
-//		adjacencies:["4","2"]
-//	},
-//			
-//   	{
-//		id:"2",
-//		name:"apple",
-//		data:{
-//			value: "200",
-//			inc: "2",
-//		}
-//   	}
-//	]
-	
-	
-	
-//	init RGraph
-	
-    var rgraph = new $jit.RGraph({
-        //Where to append the visualization
-        injectInto: 'infovis',
-        //Add navigation capabilities:
-        //zooming by scrolling and panning.
-        
-        
-        Navigation: {
-          enable: true,
-          panning: true,
-          zooming: 40
-        },
-        //Set Node and Edge styles.
-        Node: {
-            color: '#ddeeff',
-            alpha: .8
-        },
-        
-        
-        Edge: {
-          color: '#C17878',
-          lineWidth:1.5
-        },
-        
-        
-        onBeforeCompute: function(node){
-=======
 
-	//	var json=[{
-	//			id:"1",
-	//			name:"blackHole",
-	//			data:{
-	//				pokemonPower:"turnYoSwagOn"
-	//			},
-	//			adjacencies:["4"]
-	//	},
-	//	{
-	//		id:"4",
-	//		name:"microsoft",
-	//		data:{
-	//			value: "400",
-	//			inc: "4",
-	//		},
-	//		adjacencies:["4","2"]
-	//	},
-	//			
-	//   	{
-	//		id:"2",
-	//		name:"apple",
-	//		data:{
-	//			value: "200",
-	//			inc: "2",
-	//		}
-	//   	}
-	//	]
 
 	//	init RGraph
 	var rgraph = new $jit.RGraph({
@@ -239,7 +151,6 @@ function init(){
 				},
 
 		onBeforeCompute: function(node){
->>>>>>> nathan
             Log.write("centering " + node.name + "...");
             //Add the relation list in the right column.
             //This list is taken from the data property of each JSON node.
@@ -298,7 +209,4 @@ function init(){
     //end
     //append information about the root relations in the right column
     $jit.id('inner-details').innerHTML = rgraph.graph.getNode(rgraph.root).data.relation;
-    $jit.id('inner-details').innerHTML = rgraph.graph.getNode(rgraph.root).data.relation;
-
-
 }
