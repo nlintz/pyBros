@@ -119,12 +119,7 @@ function init(){
         //Add navigation capabilities:
         //zooming by scrolling and panning.
         
-        Canvas: {
-        	width: "100%",
-        	height: "100%",
-        },
         
-
         Navigation: {
           enable: true,
           panning: true,

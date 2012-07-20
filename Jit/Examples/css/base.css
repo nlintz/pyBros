@@ -23,6 +23,11 @@ body {
 	z-index: 90;
 }
 
+#infovis {
+	width: 100%;
+    height: 100%;	
+}
+
 input, select {
     font-size:0.9em;
 }
@@ -85,8 +90,8 @@ a {
 
 #infovis {
     position:relative;
-    width:600px;
-    height:600px;
+    width:100%;
+    height:100%;
     margin:auto;
     overflow:hidden;
 }
