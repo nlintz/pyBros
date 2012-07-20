@@ -1,5 +1,4 @@
 import sys
-import 
 from pySQL import *
 import json
 
