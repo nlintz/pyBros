@@ -3,6 +3,18 @@ from pySQL import *
 import json
 import os
 
+class root_node(object):
+	def __init__(self):
+		self.id = 000
+		self.name = 'blackhole'
+		self.adjacencies = []
+		self.data = {'name': self.name, 'ticker': 'ground zero', 'color': 333333,'dim':350 }
+	def add_adjacent(self, universe):
+		for systems in universe:
+			for nodes in systems:
+				if nodes.star:
+					self.adjacencies.append(nodes.jitid)
+
 class node(object):
 	def __init__(self, row, star = False):
 		"""
@@ -16,7 +28,7 @@ class node(object):
 		self.adjacencies = []
 		self.pid = None
 		self.dct = {}
-		self.data
+		self.data = {}
 		self.star = star
 		self.is_star()
 		
@@ -27,11 +39,11 @@ class node(object):
 	def is_star(self):
 		if self.star:
 			self.pid = 000
-			self.adjacencies.append(self.pid)
 			
 	def star_data(self,color_dict):
 		self.data['ticker'] = self.jitid
 		for n in self.adjacencies:
+			print n
 			if n.name == 'fin info':
 				self.data['price'] = n.data['price']
 				self.data['sector'] = n.data['sector']
@@ -66,7 +78,7 @@ class node(object):
 		return adj_id
 		
 	def prep_data(self,color_dict):
-		self.data['dim'] = 0.7*(float(self.data['price']))
+	#	self.data['dim'] = 0.7*(float(self.data['price']))
 		self.data['$color'] = color_dict[self.data['sector']]
 		self.data['star'] = self.star
 		
@@ -113,7 +125,9 @@ def create_system(parent):
 def create_universe(companies):
 	universe =[]
 	for jitid in companies:
+		print jitid
 		system = create_star(jitid)
+		print type(system[0])
 		universe.append(system)
 	return universe
 
@@ -123,7 +137,7 @@ def create_data(systems, color_dict):
 			ind = systems.index(nodes)
 		else:
 			nodes.planet_data(color_dict)
-	systems[i].star_data(color_dict)
+	systems[ind].star_data(color_dict)
 	return systems
 		
 def create_JSON(systems):
@@ -141,6 +155,7 @@ def create_JSON(systems):
 
 def write_json(universe, color_dict):
 	for systems in universe:
+		print systems
 		systems = create_data(systems, color_dict)
 		create_JSON(systems)
 
