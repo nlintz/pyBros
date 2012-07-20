@@ -25,10 +25,11 @@ class data_extractor(object):
 	def extract(self, html):
 		"""Returns a list of annotated data we think is important."""
 		self.soup = bs(html)
-		self._reduce1()
-		self._reduce2()
+		#self._reduce1()
+		#self._reduce2()
 		self._reduce3()
 		self._annotate()
+		self._wash()
 		return self._good_data
 
 	def _depth(self, elem):
@@ -61,22 +62,35 @@ class data_extractor(object):
 		print 'rows: %s' % len(self._rows)
 
 	def _reduce3(self):
-		self._headers = []
-		self._cols = []
-		for row in self._rows:
-			headers = row.findAll({'th':True})
-			cols = row.findAll({'td':True})
-			for header in headers:
-				if header.contents == []:
-					self._headers.append(header)
-			for col in cols:
-				if col.contents == []:
-					self._cols.append(col)
-		print 'headers: %s' % len(self._headers)
-		print 'cols: %s' % len(self._cols)
+		# grab all the cols that relate to fin info
+		self._cols = self.soup.findAll(attrs={'class':'yfnc_tabledata1'})
+		self._headers = [ col.previous for col in self._cols ]
 
 	def _annotate(self):
-		self._good_data = zip(self._headers, self._cols)
+		texts = [ col.text for col in self._cols ]
+		self._ok_data = zip(self._headers, texts)
+
+	# TODO don't depend on indicies
+	def _wash(self):
+		"""Clean the attributes to fit the `fin info' planet better"""
+		self._good_data = range(8)
+		for i in range(len(self._ok_data)):
+			if i == 7:
+				self._good_data[0] = ('range', self._ok_data[i][1])
+			elif i == 8:
+				self._good_data[1] = ('52wk_range', self._ok_data[i][1])
+			elif i == 12:
+				self._good_data[2] = ('P/E', self._ok_data[i][1])
+			elif i == -1: # unimplemented thus far
+				self._good_data[3] = ('dividends', self._ok_data[i][1])
+			elif i == 11:
+				self._good_data[4] = ('mkt_cap', self._ok_data[i][1])
+			elif i == 9:
+				self._good_data[5] = ('volume', self._ok_data[i][1])
+			elif i == 10:
+				self._good_data[6] = ('avg_volume', self._ok_data[i][1])
+			elif i == 0: # realistically this is yesterdays price...
+				self._good_data[7] = ('price', self._ok_data[i][1])
 
 from difflib import SequenceMatcher as seqmatcher
 
@@ -84,10 +98,30 @@ def fuzzy(str1, str2):
 	"""Returns some fuzzy string comparison of the two strings."""
 	return seqmatcher(None, str1, str2).ratio()
 
+class node(object):
+	"""This is to mimic the node class from pyJit."""
+	def __init__(self, name, value):
+		self.id = None # not yet defined
+		self.jitid = None # not yet calculated
+		self.name = name
+		self.adjacencies = []
+		self.value = value
+		self.pid = None
+
+	def __repr__(self):
+		return self.name
+
 class data_cleanser(object):
 	def __init__(self):
 		pass
 
 	def cook(self, datalist):
-		pass
+		"""This is going to return a python representation of a
+		planet, not a solar system."""
+		planet = node('fin info', None)
+		for tup in datalist:
+			if type(tup) != tuple:
+				continue
+			planet.adjacencies.append(node(tup[0], tup[1]))
+		return planet
 

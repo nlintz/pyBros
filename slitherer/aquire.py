@@ -11,14 +11,17 @@
 # Trevor Pottinger
 ###############################################
 
+import csv
+
 class url_feeder(object):                                                       
 	def __init__(self, fname):
 		"""fname is the name of the file that we will have a url in
 		each line representing a page for us to scrape."""
 		self.queue = []
 		with open(fname) as f:
-			for l in f:
-				self.insert(l)
+			reader = csv.DictReader(f)
+			for l in reader:
+				self.insert((l['url'], l))
 
 	def __iter__(self):
 		return self
@@ -28,8 +31,9 @@ class url_feeder(object):
 			return self.queue.pop()
 		raise StopIteration
 
-	def insert(self, url):
-		self.queue.insert(0, url)
+	def insert(self, tup):
+		"""tup is a tuple, where tup[0] is a url, tup[1] is a dict"""
+		self.queue.insert(0, tup)
 
 import mechanize as mech
 
@@ -45,3 +49,6 @@ class url_grabber(object):
 		except:
 			return 'Failed' # we should probably handle this...
 		
+	def toss_salad(self, fname):
+		with open(fname) as f:
+			pass
