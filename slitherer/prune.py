@@ -115,7 +115,7 @@ class data_cleanser(object):
 	def __init__(self):
 		pass
 
-	def cook(self, ticker, datalist):
+	def cook(self, datalist):
 		"""This is going to return a python representation of a
 		planet, not a solar system."""
 		planet = node('fin info', None)

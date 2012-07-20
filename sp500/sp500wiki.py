@@ -1,8 +1,9 @@
 import urllib2
-from bs4 import BeautifulSoup as bs
+from BeautifulSoup import BeautifulSoup as bs
 from HTMLParser import HTMLParser
 import csv
 import sys
+import re
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -26,15 +27,15 @@ def get_table_soup(link):
 	response = opener.open(link)
 	page = response.read()
 
-	bsoup = bs(page, "lxml")
-	table = bsoup.find("table", {"class":"wikitable"})
+	bsoup = bs(page)
+	table = bsoup.find("table", {"class":re.compile("wikitable")})
 	return table
 
 
 def get_company_list(table):
 	records = []
 	indices = []
-	comps = table.find_all('tr')
+	comps = table.findAll('tr')
 
 	th_html = str(comps[0])
 	header = strip_tags(th_html).strip('\n').split('\n')
@@ -48,6 +49,19 @@ def get_company_list(table):
 		for index in indices:
 			del row[index]
 		records.append(row)
+	for i in range(len(records[0])):
+		if records[0][i] == 'Ticker symbol':
+			records[0][i] = 'ticker'
+		elif records[0][i] == 'Company':
+			records[0][i] = 'company'
+		elif records[0][i] == 'GICS Sector':
+			records[0][i] = 'sector'
+	for i in range(len(records)):
+		if i == 0:
+			records[i].append('url')
+		else:
+			url = "http://finance.yahoo.com/q?s=%s" % (records[i][0])
+			records[i].append(url)
 	return records
 
 
@@ -62,7 +76,7 @@ def createCSV(companies, header = False):
 def main():
 	table = get_table_soup("http://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
 	companies = get_company_list(table)
-	createCSV(companies, header = False)
+	createCSV(companies, True)
 
 if __name__ == '__main__':
 	main() 
