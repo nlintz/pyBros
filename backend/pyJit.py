@@ -15,7 +15,7 @@ class node(object):
 		self.value = row['value']
 		self.pid = None
 		self.jit = None
-		self.d = {}
+		self.dct = {}
 	def __repr__(self):
 		return self.name
 		return self.pid
@@ -39,13 +39,13 @@ class node(object):
 		generates JSON structure
 		returns JSON structure
 		"""
-		self.d = {
+		self.dct = {
 		'jitid':self.jitid,
 		'name': self.name,
 		'data':{'value':self.value},
 		'adjacencies':self.adjacencies
 		}
-		self.jit = JSON.dumps(d)
+		self.jit = json.dumps(self.dct)
 		return self.jit
 	def write_JSON(self, fName):
 		"""
@@ -53,7 +53,7 @@ class node(object):
 		args: file name
 		"""
 		with open('%s.json' % (fName), 'wb') as fp:
-			json.dump(self.d, fp)
+			json.dump(self.dct, fp)
 
 
 def create_star(jitid):
@@ -66,13 +66,13 @@ def create_star(jitid):
 	n = node(row)
 	system = [n]
 	if n.is_parent():
-		system.extend(create_planets(n))
+		system.extend(create_system(n))
 	return system
 	
 def create_system(parent):
 	"""
 	creates childs of parent node recursively
-	args: parent node
+	args: node object
 	returns list of all children node for given parent node
 	"""
 	system = []
@@ -83,7 +83,7 @@ def create_system(parent):
 		parent.add_child(p)
 		system.append(p)
 		if p.is_parent():
-			system.extend(create_planets(p))
+			system.extend(create_system(p))
 		else:
 			continue
 	return system
@@ -94,9 +94,10 @@ def main(jitid):
 	args: jitid of company
 	prints json structure of node
 	"""
-	system = create_system(jitid)
+	system = create_star(jitid)
 	for i in range(len(system)):
-		system[i] = system[i].generate_JSON
+		system[i] = system[i].generate_JSON()
+	print system	
 
 if __name__ == "__main__":
 	main(sys.argv[1])
