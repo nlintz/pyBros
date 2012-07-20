@@ -16,6 +16,8 @@ def get_node_by_id(node_id):
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]
 	con.close()
+	if match == None:
+		return {}
 	return dict(zip(desc, list(match)))
 
 # TODO clean name
@@ -31,7 +33,9 @@ def get_node_by_jitid(jitid):
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]
 	con.close()
-	return dict(zip(desc, match))
+	if match == None:
+		return {}
+	return dict(zip(desc, list(match)))
 
 def get_childs_by_pid(pid):
 	"""Returns all the rows that correspond to the children with 
@@ -65,4 +69,6 @@ def get_parent_by_chid(chid):
 	match = c.fetchone()
 	desc = [ desc[0] for desc in c.description ]
 	con.close()
-	return dict(zip(desc, match))
+	if match == None:
+		return {}
+	return dict(zip(desc, list(match)))
