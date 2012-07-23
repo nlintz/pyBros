@@ -29,7 +29,7 @@ function init() {
 	var json =
 			[
 			{
-			"adjacencies": ["1","2","3","4","5","6","7","8","9"], "data": {$dim:300, $color:"grey", "is_star":true,"value": null, "name":"IM A BLACK HOLE","jitid":"","value":""}, "name": "intuit", "id": "0"
+			"adjacencies": ["1","2","3","4","5","6","7","8","9"], "data": {$dim:300, $color:"grey", "is_star":true,"value": null, "name":"IM A BLACK HOLE","jitid":"","value":""}, "name": "Black Hole", "id": "0"
 			},
 			{
 			"adjacencies": ["0","10","11"], "data": {$color:"D0D9C8",$dim:100,is_star:true,"value": "100", "name":"mars","jitid":"MA","fin info":"100"}, "name": "mars", "id": "1"
