@@ -1,0 +1,40 @@
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
+
+
+#container {
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 100;
+}
+
+body { 
+	background: url(images/background.png) repeat 5% 5%;
+	z-index: 70;
+}
+#midground {
+	background: url(images/midground.png) repeat 20% 20%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: 80;
+}
+#foreground {
+	background: url(images/foreground.png) repeat 90% 110%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: 90;
+}
+
+#center-container {
+    height:100%;
+    width:100%;
+    position:absolute;
+    top:0;
+    position:absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    }
