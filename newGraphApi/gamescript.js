@@ -10,6 +10,10 @@ function gamescript(){
 	canvasElement.appendTo('body');
 // End Setting Up The Canvas
 
+
+	canvas.fillStyle = "#FF0000";
+	canvas.font = "bold 16px Arial";
+
 	
 //	Start setting up frame rate
 // 	Dont edit me unless you need to change framerate or something like that
@@ -37,6 +41,7 @@ function gamescript(){
 			var angle = calculateAngles(Stars)
 			star.draw(angle*angleOffset);
 			angleOffset++;
+
 			
 		});
 		Planets.forEach(function(planet){
@@ -51,10 +56,10 @@ function gamescript(){
 	
 // 	Initialize the objects 
 // 	%TODO% make an interface to enter in all the objects from a json object
-	var s = new Star({size:50,color:'green',distance:200})
-	var s2 = new Star({size:50,color:'yellow',distance:100})
-	var s3 = new Star({size:35, color:'blue', distance: 140})
-	var s4 = new Star({size:35, color:'blue', distance: 300})
+	var s = new Star({size:50,color:'green',distance:200, name: "apple", price: "10", ticker:"AAPL"})
+	var s2 = new Star({size:50,color:'yellow',distance:250, name: "starbucks", price: "20", ticker:"SB"})
+	var s3 = new Star({size:35, color:'blue', distance: 140, name: "microsoft", price: "30", ticker:"MC"})
+	var s4 = new Star({size:35, color:'blue', distance: 300, name: "ubisoft", price: "100", ticker:"UB"})
 	var Stars = [s,s2,s3,s4];
 	
 	var p = new Planet(Stars[0]);
@@ -79,9 +84,9 @@ function gamescript(){
 	
 	var angle = calculateAngles(Stars);
 	function Star(sunObject){
-// 		this.name=sunObject.name
-// 		this.ticker=sunObject.ticker
-// 		this.value=sunObject.value
+		this.name=sunObject.name
+		this.ticker=sunObject.ticker
+		this.price=sunObject.price
 // 		this.adjacencies=sunObject.adjacencies;
 		this.planets=[];		
 		
@@ -91,6 +96,7 @@ function gamescript(){
 		var rotationHolder = 0;
 		this.x=this.distance*Math.cos(angle+rotationHolder)+CENTERX;
 		this.y=this.distance*Math.sin(angle+rotationHolder)+CENTERY;
+		this.text=this.name+ "::" + this.ticker +"::" + "$" + this.price;
 		this.draw = function(angle){
 				canvas.beginPath();
 				var iangle=0;
@@ -102,6 +108,7 @@ function gamescript(){
 				canvas.fillStyle=this.color;
 				canvas.fill();
 				rotationHolder += .02;
+
 			};
 		}
 	
@@ -111,17 +118,18 @@ function gamescript(){
 		var rotationHolder = 0;
 		starOrigin.planets.push(this);
 		this.draw = function(angle){
-			this.x=planetaryOffset*Math.sin(angle+rotationHolder)+starOrigin.x;
-			this.y=planetaryOffset*Math.cos(angle+rotationHolder)+starOrigin.y;
 			canvas.beginPath();
 			var iangle=0;
+			this.x=planetaryOffset*Math.cos(angle+rotationHolder)+starOrigin.x;
+
+			this.y=planetaryOffset*Math.sin(angle+rotationHolder)+starOrigin.y;
+			
 			var eangle=Math.PI*2;
 			canvas.arc(this.x,this.y,10,iangle,eangle,true);
 			canvas.closePath();
 			canvas.fillStyle='red';
-			
 			canvas.fill();
-			
+
 			rotationHolder += .05
 			
 		}
@@ -143,7 +151,8 @@ function gamescript(){
 				canvas.closePath();
 				canvas.fillStyle='black';
 				canvas.fill();
-				canvas.fillText(x,y,"hi");
+				canvas.fillStyle='white';
+				canvas.fillText('Im a fucking BLACKHOLE',x-90,y);
 			};
 		}
 		
