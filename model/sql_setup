@@ -3,3 +3,12 @@
 create user 'pybros'@'localhost' identified by 'getIn2it';
 create database rev3;
 grant all on rev3.* to 'pybros'@'localhost';
+
+# then switched to the new user
+
+use rev3;
+create table nodes ( nid serial primary key, name varchar(255), jitid varchar(64), value varchar(255) );
+create table relations ( rid serial primary key, pid bigint(20), chid bigint(20) );
+
+# the sizes were picked because 'show columns from nodes' reports the type
+#  of nid being a bigint(20)
