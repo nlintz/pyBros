@@ -1,0 +1,5 @@
+# i initially logged in as root to do this..
+
+create user 'pybros'@'localhost' identified by 'getIn2it';
+create database rev3;
+grant all on rev3.* to 'pybros'@'localhost';
