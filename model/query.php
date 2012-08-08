@@ -10,57 +10,72 @@ require_once 'clean.php';
 /**
  * Returns a single node by its nid
  */
-function get_node_by_id($node_id) {
+function select_node_by_id($node_id) {
 	$nid = clean($node_id);
-	$q = "SELECT *
-		FROM nodes
-		WHERE nid='$nid'";
-	$r = mysql_query($q);
-	// TODO error checking
-	return mysql_fetch_assoc($r);
-}
 
-/**
- * Returns a single node by its jitid
- */
-function get_node_by_jitid($jitId) {
-	$jitid = clean($jitId);
-	$q = "SELECT * 
-		FROM nodes
-		WHERE jitid='$jitid'";
+	$q = "SELECT name, value
+		FROM node_attrs
+		WHERE node_id='$nid'";
 	$r = mysql_query($q);
-	return mysql_fetch_assoc($r);
+
+	$node = array();
+
+	// TODO error checking
+	while ($row = mysql_fetch_assoc($r)) {
+		$node[$row['name']] = $row['value'];
+	}
+
+	return $node;
 }
 
 /**
  * Returns a table that represents all the children of $parent_id
  */
-function get_childs_by_pid($parent_id) {
+function select_children_by_pid($parent_id) {
 	$pid = clean($parent_id);
-	$q = "SELECT *
-		FROM relations
-		WHERE pid='$pid'";
+
+	$q = "SELECT node_attrs.node_id, node_attrs.name, node_attrs.value
+		FROM node_attrs
+		INNER JOIN edges
+		ON node_attrs.node_id=edges.child_id
+		WHERE edges.parent_id='$pid'";
 	$r = mysql_query($q);
+
+	// tbl keys are the node_ids, values are assoc arrays 
 	$tbl = array();
-	$i = 0;
 	while ($row = mysql_fetch_assoc($r)) {
-		$tbl[$i++] = $row;
+		$id = $row['node_id'];
+		if (array_key_exists($id, $tbl)) {
+			$tbl[$id][ $row['name'] ] = $row['value'];
+		}
+		else {
+			$tbl[$id] = array( $row['name'] => $row['value'] );
+		}
 	}
+
 	return $tbl;
 }
 
 /**
  * Returns a single node, that is the parent of $child_id
  */
-function get_parent_by_chid($child_id) {
+function select_parent_by_chid($child_id) {
 	$chid = clean($child_id);
-	$q = "SELECT nodes.*
-		FROM nodes
-		INNER JOIN childs
-		ON nodes.nid=relations.pid
-		WHERE relations.chid='$chid'";
+
+	$q = "SELECT node_attrs.name, node_attrs.value
+		FROM node_attrs
+		INNER JOIN edges
+		ON node_attrs.node_id=edges.parent_id
+		WHERE edges.child_id='$chid'";
 	$r = mysql_query($q);
-	return mysql_fetch_assoc($r);
+
+	$node = array();
+
+	while ($row = mysql_fetch_assoc($r)) {
+		$node[$row['name']] = $row['value'];
+	}
+
+	return $node;
 }
 
 ?>

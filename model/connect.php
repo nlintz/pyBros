@@ -17,7 +17,7 @@ function connect() {
 		die('Could not connect to database: ' . mysql_error());
 	}
 
-	mysql_select_db('rev3', $con);
+	mysql_select_db('rev4', $con);
 
 	return $con;
 }
