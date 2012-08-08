@@ -27,7 +27,7 @@ class url_feeder(object):
 				comp = l['company']
 				comp = comp.replace(' ', '_')
 				url = wiki % comp
-				self.insert(url)
+				self.insert((url, l))
 
 	def __iter__(self):
 		return self

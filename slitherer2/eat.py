@@ -4,7 +4,7 @@
 # This file will work on feeding processed data
 #  to the database, it may need some utensils
 #
-# 2012-07-19
+# 2012-07-31
 # Trevor Pottinger
 ###############################################
 
@@ -17,6 +17,11 @@ def _gen_jitid(name, compname, ticker):
 		m = md5()
 		m.update('salt' + str(compname) + name)
 		return m.hexdigest()
+
+def _clean(string):
+	if string == None:
+		return ''
+	return string.replace('\'', '').replace(';', '')
 
 from prune import node
 import MySQLdb
@@ -38,25 +43,26 @@ class database_feeder(object):
 		"""items are nodes, from prune"""
 		con = self._connect()
 		c = con.cursor()
+		cleaned_item = (_clean(item.name), _clean(item.jitid), _clean(item.value))
 		query = """INSERT INTO nodes (name, jitid, value)
-VALUE ('%s', '%s', '%s');""" % (item.name, item.jitid, item.value)
-		print query
+VALUE ('%s', '%s', '%s');""" % cleaned_item
+		#print query
 		# this is where the exception occured
 		c.execute(query)
 		con.commit()
-		query = """SELECT id
+		query = """SELECT nid
 		FROM nodes
 		WHERE jitid='%s';""" % item.jitid
-		print query
+		#print query
 		c.execute(query)
 		row = c.fetchone()
 		item.myid = row[0]
 		if item.pid != None:
-			query = """INSERT INTO childs (pid, chid)
+			query = """INSERT INTO relations (pid, chid)
 VALUE ('%s', '%s');""" % (item.pid, item.myid)
 			c.execute(query)
 			con.commit()
-			print query
+			#print query
 		con.close()
 
 	def eat(self, entree, sides):
