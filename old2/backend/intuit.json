@@ -1,4 +1,0 @@
-{"adjacencies": [0, "239"], "data": {"value": null}, "name": "intuit", "jitid": "Az9"}
-{"adjacencies": ["8ob", "7br"], "data": {"value": null}, "name": "fin info", "jitid": "239"}
-{"adjacencies": [], "data": {"value": "INTU"}, "name": "ticker", "jitid": "8ob"}
-{"adjacencies": [], "data": {"value": "59"}, "name": "price", "jitid": "7br"}
